@@ -3,6 +3,7 @@
 import datetime
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -62,6 +63,17 @@ class LinkInlineProcessor(markdown.inlinepatterns.LinkInlineProcessor):
 
 def get(l, index, default):
     return l[index] if index < len(l) else default
+
+
+def convert_task_lists(html):
+    """Convert GitHub-style task list markers to unicode symbols in HTML list items."""
+    # Pattern for checked items: <li> followed by optional whitespace,
+    # [x] or [X], followed by optional whitespace
+    html = re.sub(r'(<li>)\s*\[(x|X)\]\s*', r'\1☑ ', html)
+    # Pattern for unchecked items: <li> followed by optional whitespace,
+    # [ ] followed by optional whitespace
+    html = re.sub(r'(<li>)\s*\[ \]\s*', r'\1☐ ', html)
+    return html
 
 
 def main():
@@ -164,6 +176,9 @@ def main():
 
         # Parse content
         content = md.convert(content)
+
+        # Convert task list markers to unicode symbols
+        content = convert_task_lists(content)
 
         # Merge template
         template = template.replace("%content%", content)
