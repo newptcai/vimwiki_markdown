@@ -31,7 +31,7 @@ default_template = """<!DOCTYPE html>
     </body>
 </html>
 """
-default_extension = ["fenced_code", "tables", "codehilite", "toc"]
+default_extension = ["fenced_code", "tables", "codehilite", "toc", "smarty"]
 
 vim = shutil.which("vim") and "vim" or (shutil.which("nvim") and "nvim")
 
